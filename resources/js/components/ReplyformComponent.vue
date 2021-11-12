@@ -73,19 +73,17 @@ export default {
 
 <style>
     .replyBox{
-        background-color: #f0efeb;
+        /*background-color: #f0efeb;*/
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         padding-top: 2%;
     }
     .replyText{
-        /*border: 1.5px solid #b7b7a4;*/
         border-radius: 3%;
         height: 100px;
         width:80%;
         background-color: #fff;
-        /*overflow: auto;*/
         outline: none;
     }
     .replyButtons{
@@ -101,5 +99,9 @@ export default {
     }
     .form-control{
         margin: 5%;
+        margin-top: 0;
+    }
+    .replyBody{
+        border-bottom: 1px solid #bdbdbd
     }
 </style>

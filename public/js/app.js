@@ -6902,7 +6902,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.replyBox{\n    background-color: #f0efeb;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding-top: 2%;\n}\n.replyText{\n    /*border: 1.5px solid #b7b7a4;*/\n    border-radius: 3%;\n    height: 100px;\n    width:80%;\n    background-color: #fff;\n    /*overflow: auto;*/\n    outline: none;\n}\n.replyButtons{\n    display: flex;\n    justify-content: flex-end;\n    padding: 5px;\n}\n.btn-primary{\n    margin-right: 6px;\n}\n.replyName{\n   width: 80%;\n}\n.form-control{\n    margin: 5%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.replyBox{\n    /*background-color: #f0efeb;*/\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding-top: 2%;\n}\n.replyText{\n    border-radius: 3%;\n    height: 100px;\n    width:80%;\n    background-color: #fff;\n    outline: none;\n}\n.replyButtons{\n    display: flex;\n    justify-content: flex-end;\n    padding: 5px;\n}\n.btn-primary{\n    margin-right: 6px;\n}\n.replyName{\n   width: 80%;\n}\n.form-control{\n    margin: 5%;\n    margin-top: 0;\n}\n.replyBody{\n    border-bottom: 1px solid #bdbdbd\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -6926,7 +6926,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.commentBox{\n    /*border: 1px solid #bdbdbd;*/\n    background: #f1f1f1;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding: 0;\n}\n.commentBody{\n    padding: 0;\n    border-bottom: 1px solid #bdbdbd;\n    padding-bottom: 3%;\n}\n.commentText{\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.reply-btn{\n    display: flex;\n    justify-content: flex-end;\n}\n.name{\n    font-size: 1rem;\n    font-weight: bold;\n    color: #1b4b72;\n    text-shadow: 0.2px 0.2px  #888;\n}\n.replyBody2{\n    border-radius: 10px;\n    background: yellow;\n    margin: 3%;\n}\n.replyBody{\n    border-radius: 10px;\n    background: pink;\n    margin: 3%;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.commentBox{\n    /*border: 1px solid #bdbdbd;*/\n    background: white;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding: 0;\n}\n.commentBody{\n    padding: 0;\n    border-bottom: 1px solid #bdbdbd;\n    /*padding-bottom: 3%;*/\n}\n.commentText{\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.reply-btn{\n    display: flex;\n    justify-content: flex-end;\n}\n.name{\n    font-size: 1rem;\n    font-weight: bold;\n    color: #1b4b72;\n    text-shadow: 0.2px 0.2px  #888;\n}\n.replyBody2{\n    border-radius: 10px;\n    /*background: yellow;*/\n    margin: 3%;\n}\n.replyBody{\n    border-radius: 10px;\n    /*background: pink;*/\n    /*margin: 3%;*/\n    border-bottom: 1px solid #bdbdbd;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39155,7 +39155,7 @@ var render = function () {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-info",
+                                  staticClass: "btn btn-outline-info",
                                   on: {
                                     click: function ($event) {
                                       return _vm.showReplyForm(
@@ -39191,39 +39191,48 @@ var render = function () {
                               "div",
                               {
                                 staticClass:
-                                  "commentBody replyBody col-md-10 ml-auto",
+                                  "commentBody replyBody col-md-11 ml-auto",
                                 staticStyle: { "border-bottom": "none" },
                                 attrs: { id: replyComment.commentId },
                               },
                               [
-                                _c("div", { staticStyle: { padding: "3%" } }, [
-                                  _c("div", { staticClass: "name" }, [
-                                    _vm._v(_vm._s(replyComment.name)),
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "commentText" }, [
-                                    _c("div", [
-                                      _vm._v(_vm._s(replyComment.comment)),
+                                _c(
+                                  "div",
+                                  {
+                                    staticStyle: {
+                                      padding: "3%",
+                                      "border-top": "1px solid #bdbdbd",
+                                    },
+                                  },
+                                  [
+                                    _c("div", { staticClass: "name" }, [
+                                      _vm._v(_vm._s(replyComment.name)),
                                     ]),
                                     _vm._v(" "),
-                                    _c("div", { staticClass: "reply-btn" }, [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass: "btn btn-info",
-                                          on: {
-                                            click: function ($event) {
-                                              return _vm.showReplyForm(
-                                                replyComment.commentId
-                                              )
+                                    _c("div", { staticClass: "commentText" }, [
+                                      _c("div", [
+                                        _vm._v(_vm._s(replyComment.comment)),
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("div", { staticClass: "reply-btn" }, [
+                                        _c(
+                                          "button",
+                                          {
+                                            staticClass: "btn btn-outline-info",
+                                            on: {
+                                              click: function ($event) {
+                                                return _vm.showReplyForm(
+                                                  replyComment.commentId
+                                                )
+                                              },
                                             },
                                           },
-                                        },
-                                        [_vm._v("Reply")]
-                                      ),
+                                          [_vm._v("Reply")]
+                                        ),
+                                      ]),
                                     ]),
-                                  ]),
-                                ]),
+                                  ]
+                                ),
                                 _vm._v(" "),
                                 _c(
                                   "div",
@@ -39255,7 +39264,7 @@ var render = function () {
                                           "div",
                                           {
                                             staticClass:
-                                              "commentBody replyBody2 col-md-10 ml-auto",
+                                              "commentBody replyBody2 col-md-11 ml-auto",
                                             staticStyle: {
                                               "border-bottom": "none",
                                             },
@@ -39267,7 +39276,11 @@ var render = function () {
                                             _c(
                                               "div",
                                               {
-                                                staticStyle: { padding: "3%" },
+                                                staticStyle: {
+                                                  padding: "3%",
+                                                  "border-top":
+                                                    "1px solid #bdbdbd",
+                                                },
                                               },
                                               [
                                                 _c(

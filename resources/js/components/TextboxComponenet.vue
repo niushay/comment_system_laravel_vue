@@ -5,12 +5,12 @@
                 <div v-for="comment in comments" :key="comment.commentId">
                     <div v-if="comment.reply_id == 0">
                         <div class="commentBody" :id="comment.commentId">
-                            <div style="padding: 3% ">
+                            <div style=" padding: 3%;">
                                 <div class="name">{{comment.name}}</div>
                                 <div class="commentText">
                                     <div>{{comment.comment}}</div>
                                     <div class="reply-btn">
-                                        <button class="btn btn-info" @click="showReplyForm(comment.commentId)">Reply</button>
+                                        <button class="btn btn-outline-info" @click="showReplyForm(comment.commentId)">Reply</button>
                                     </div>
                                 </div>
                             </div>
@@ -20,13 +20,13 @@
                             </div>
 
                             <div v-for="replyComment in comment.replies" :key="replyComment.commentId">
-                                <div class="commentBody replyBody col-md-10 ml-auto" :id="replyComment.commentId" style="border-bottom: none">
-                                    <div style="padding: 3% ">
+                                <div class="commentBody replyBody col-md-11 ml-auto" :id="replyComment.commentId" style="border-bottom: none">
+                                    <div style="padding: 3%; border-top: 1px solid #bdbdbd ">
                                         <div class="name">{{replyComment.name}}</div>
                                         <div class="commentText">
                                             <div>{{replyComment.comment}}</div>
                                             <div class="reply-btn">
-                                                <button class="btn btn-info" @click="showReplyForm(replyComment.commentId)">Reply</button>
+                                                <button class="btn btn-outline-info" @click="showReplyForm(replyComment.commentId)">Reply</button>
                                             </div>
                                         </div>
                                     </div>
@@ -36,8 +36,8 @@
                                     </div>
 
                                     <div v-for="replyComment2 in replyComment.replies" :key="replyComment2.commentId">
-                                        <div class="commentBody replyBody2 col-md-10 ml-auto" :id="replyComment2.commentId" style="border-bottom: none">
-                                            <div style="padding: 3% ">
+                                        <div class="commentBody replyBody2 col-md-11 ml-auto" :id="replyComment2.commentId" style="border-bottom: none">
+                                            <div style="padding: 3%; border-top: 1px solid #bdbdbd">
                                                 <div class="name">{{replyComment2.name}}</div>
                                                 <div class="commentText">
                                                     <div>{{replyComment2.comment}}</div>
@@ -93,7 +93,7 @@ export default {
 
     .commentBox{
         /*border: 1px solid #bdbdbd;*/
-        background: #f1f1f1;
+        background: white;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -102,7 +102,7 @@ export default {
     .commentBody{
         padding: 0;
         border-bottom: 1px solid #bdbdbd;
-        padding-bottom: 3%;
+        /*padding-bottom: 3%;*/
     }
     .commentText{
         display: flex;
@@ -122,13 +122,14 @@ export default {
 
     .replyBody2{
         border-radius: 10px;
-        background: yellow;
+        /*background: yellow;*/
         margin: 3%;
     }
 
     .replyBody{
         border-radius: 10px;
-        background: pink;
-        margin: 3%;
+        /*background: pink;*/
+        /*margin: 3%;*/
+        border-bottom: 1px solid #bdbdbd;
     }
 </style>
