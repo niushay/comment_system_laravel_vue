@@ -6926,7 +6926,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.commentBox{\n    /*border: 1px solid #bdbdbd;*/\n    background: white;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding: 0;\n}\n.commentBody{\n    padding: 0;\n    border-bottom: 1px solid #bdbdbd;\n    /*padding-bottom: 3%;*/\n}\n.commentText{\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.reply-btn{\n    display: flex;\n    justify-content: flex-end;\n}\n.name{\n    font-size: 1rem;\n    font-weight: bold;\n    color: #1b4b72;\n    text-shadow: 0.2px 0.2px  #888;\n}\n.replyBody2{\n    border-radius: 10px;\n    /*background: yellow;*/\n    margin: 3%;\n}\n.replyBody{\n    border-radius: 10px;\n    /*background: pink;*/\n    /*margin: 3%;*/\n    border-bottom: 1px solid #bdbdbd;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.commentBox{\n    /*border: 1px solid #bdbdbd;*/\n    background: white;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding: 0;\n}\n.commentBody{\n    padding: 0;\n    border-bottom: 1px solid #bdbdbd;\n}\n.commentText{\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.reply-btn{\n    display: flex;\n    justify-content: flex-end;\n}\n.name{\n    font-size: 1rem;\n    font-weight: bold;\n    color: #1b4b72;\n    text-shadow: 0.2px 0.2px  #888;\n}\n.replyBody2{\n    border-radius: 10px;\n    /*background: yellow;*/\n    margin: 3%;\n}\n.replyBody{\n    border-radius: 10px;\n    /*background: pink;*/\n    /*margin: 3%;*/\n    border-bottom: 1px solid #bdbdbd;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -39155,7 +39155,7 @@ var render = function () {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-outline-info",
+                                  staticClass: "btn btn-link",
                                   on: {
                                     click: function ($event) {
                                       return _vm.showReplyForm(
@@ -39200,7 +39200,7 @@ var render = function () {
                                   "div",
                                   {
                                     staticStyle: {
-                                      padding: "3%",
+                                      padding: "1%",
                                       "border-top": "1px solid #bdbdbd",
                                     },
                                   },
@@ -39218,7 +39218,7 @@ var render = function () {
                                         _c(
                                           "button",
                                           {
-                                            staticClass: "btn btn-outline-info",
+                                            staticClass: "btn btn-link",
                                             on: {
                                               click: function ($event) {
                                                 return _vm.showReplyForm(
@@ -39277,7 +39277,7 @@ var render = function () {
                                               "div",
                                               {
                                                 staticStyle: {
-                                                  padding: "3%",
+                                                  padding: "1%",
                                                   "border-top":
                                                     "1px solid #bdbdbd",
                                                 },

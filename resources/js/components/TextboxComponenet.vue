@@ -10,7 +10,7 @@
                                 <div class="commentText">
                                     <div>{{comment.comment}}</div>
                                     <div class="reply-btn">
-                                        <button class="btn btn-outline-info" @click="showReplyForm(comment.commentId)">Reply</button>
+                                        <button class="btn btn-link" @click="showReplyForm(comment.commentId)">Reply</button>
                                     </div>
                                 </div>
                             </div>
@@ -21,12 +21,12 @@
 
                             <div v-for="replyComment in comment.replies" :key="replyComment.commentId">
                                 <div class="commentBody replyBody col-md-11 ml-auto" :id="replyComment.commentId" style="border-bottom: none">
-                                    <div style="padding: 3%; border-top: 1px solid #bdbdbd ">
+                                    <div style="padding: 1%; border-top: 1px solid #bdbdbd ">
                                         <div class="name">{{replyComment.name}}</div>
                                         <div class="commentText">
                                             <div>{{replyComment.comment}}</div>
                                             <div class="reply-btn">
-                                                <button class="btn btn-outline-info" @click="showReplyForm(replyComment.commentId)">Reply</button>
+                                                <button class="btn btn-link" @click="showReplyForm(replyComment.commentId)">Reply</button>
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
 
                                     <div v-for="replyComment2 in replyComment.replies" :key="replyComment2.commentId">
                                         <div class="commentBody replyBody2 col-md-11 ml-auto" :id="replyComment2.commentId" style="border-bottom: none">
-                                            <div style="padding: 3%; border-top: 1px solid #bdbdbd">
+                                            <div style="padding: 1%; border-top: 1px solid #bdbdbd">
                                                 <div class="name">{{replyComment2.name}}</div>
                                                 <div class="commentText">
                                                     <div>{{replyComment2.comment}}</div>
@@ -102,7 +102,6 @@ export default {
     .commentBody{
         padding: 0;
         border-bottom: 1px solid #bdbdbd;
-        /*padding-bottom: 3%;*/
     }
     .commentText{
         display: flex;
