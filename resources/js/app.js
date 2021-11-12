@@ -16,6 +16,7 @@ window.Form = Form;
 import comment from './components/CommentComponent.vue';
 import blog from './components/BlogComponent.vue';
 import textbox from './components/TextboxComponenet.vue';
+import replyform from './components/ReplyformComponent.vue';
 
 /**
  * The following block of code may be used to automatically register your
@@ -30,9 +31,10 @@ import textbox from './components/TextboxComponenet.vue';
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-Vue.component('blog', require('./components/BlogComponent.vue').default);
+Vue.component('blog-component', require('./components/BlogComponent.vue').default);
 Vue.component('comment-component', require('./components/CommentComponent.vue').default);
 Vue.component('textbox-component', require('./components/TextboxComponenet.vue').default);
+Vue.component('replyform-component', require('./components/ReplyformComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

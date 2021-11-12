@@ -18,6 +18,7 @@ class CreateCommentsTable extends Migration
             $table->string('name');
             $table->longText('comment');
             $table->integer('reply_id')->default(0);
+            $table->integer('replies')->default(0);
             $table->timestamps();
         });
     }

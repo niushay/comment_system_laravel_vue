@@ -2140,13 +2140,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       form: new Form({
         name: '',
         comment: ''
-      })
+      }),
+      comments: []
     };
   },
   methods: {
@@ -2154,15 +2158,20 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post("/api/store", this.form).then(function (response) {
-        var toastContainer = document.querySelector('.toast-container');
+        _this.fetchComments();
+
+        _this.form.name = '';
+        _this.form.comment = '';
       })["catch"](function (error) {
         _this.errorMessage = error.message;
         console.error("There was an error!", error);
       });
     },
     fetchComments: function fetchComments() {
+      var _this2 = this;
+
       axios.get("/api/fetch_comments").then(function (res) {
-        console.log('this is res', res);
+        _this2.comments = res.data.comments;
       });
     }
   },
@@ -2203,6 +2212,87 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     console.log('Component mounted.');
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      form: new Form({
+        replyName: '',
+        replyComment: ''
+      }),
+      comments: []
+    };
+  },
+  props: ['replyId'],
+  methods: {
+    add_reply: function add_reply(repId) {
+      var _this = this;
+
+      axios.post("/api/add_reply", [this.form, repId]).then(function (response) {
+        _this.form.replyName = '';
+        _this.form.replyComment = ''; //Hide the Form
+
+        var formElement = document.getElementById("reply_id_" + repId);
+        formElement.style.display = 'none'; //fetch comments
+
+        _this.fetchComments();
+      })["catch"](function (error) {
+        _this.errorMessage = error.message;
+        console.error("There was an error!", error);
+      });
+    },
+    fetchComments: function fetchComments() {
+      this.$emit("fetchCom");
+    },
+    cancelReply: function cancelReply(commentId) {
+      console.log(commentId);
+      var formElement = document.getElementById("reply_id_" + commentId);
+      formElement.style.display = 'none';
+    }
   }
 });
 
@@ -2281,81 +2371,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      comments: []
+      replyClicked: false
     };
   },
-  props: [],
-  methods: {}
+  props: ['comments'],
+  methods: {
+    showReplyForm: function showReplyForm(commentId) {
+      var formElement = document.getElementById("form_" + commentId);
+      var form = document.getElementById("reply_id_" + commentId);
+      formElement.style.display = 'block';
+      form.style.display = 'block';
+    },
+    fetchComments: function fetchComments() {
+      this.$emit("fetch");
+    }
+  },
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -2372,6 +2406,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_CommentComponent_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/CommentComponent.vue */ "./resources/js/components/CommentComponent.vue");
 /* harmony import */ var _components_BlogComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/BlogComponent.vue */ "./resources/js/components/BlogComponent.vue");
 /* harmony import */ var _components_TextboxComponenet_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/TextboxComponenet.vue */ "./resources/js/components/TextboxComponenet.vue");
+/* harmony import */ var _components_ReplyformComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/ReplyformComponent.vue */ "./resources/js/components/ReplyformComponent.vue");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -2388,6 +2423,7 @@ window.Form = vform__WEBPACK_IMPORTED_MODULE_0__["default"];
 
 
 
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -2399,9 +2435,10 @@ window.Form = vform__WEBPACK_IMPORTED_MODULE_0__["default"];
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', (__webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]));
-Vue.component('blog', (__webpack_require__(/*! ./components/BlogComponent.vue */ "./resources/js/components/BlogComponent.vue")["default"]));
+Vue.component('blog-component', (__webpack_require__(/*! ./components/BlogComponent.vue */ "./resources/js/components/BlogComponent.vue")["default"]));
 Vue.component('comment-component', (__webpack_require__(/*! ./components/CommentComponent.vue */ "./resources/js/components/CommentComponent.vue")["default"]));
 Vue.component('textbox-component', (__webpack_require__(/*! ./components/TextboxComponenet.vue */ "./resources/js/components/TextboxComponenet.vue")["default"]));
+Vue.component('replyform-component', (__webpack_require__(/*! ./components/ReplyformComponent.vue */ "./resources/js/components/ReplyformComponent.vue")["default"]));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -6845,6 +6882,130 @@ var app = new Vue({
 }));
 //# sourceMappingURL=bootstrap.js.map
 
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css&":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.replyBox{\n    background-color: #f0efeb;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding-top: 2%;\n}\n.replyText{\n    /*border: 1.5px solid #b7b7a4;*/\n    border-radius: 3%;\n    height: 100px;\n    width:80%;\n    background-color: #fff;\n    /*overflow: auto;*/\n    outline: none;\n}\n.replyButtons{\n    display: flex;\n    justify-content: flex-end;\n    padding: 5px;\n}\n.btn-primary{\n    margin-right: 6px;\n}\n.replyName{\n   width: 80%;\n}\n.form-control{\n    margin: 5%;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.commentBox{\n    /*border: 1px solid #bdbdbd;*/\n    background: #f1f1f1;\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n    padding: 0;\n}\n.commentBody{\n    padding: 0;\n    border-bottom: 1px solid #bdbdbd;\n    padding-bottom: 3%;\n}\n.commentText{\n    display: flex;\n    flex-direction: column;\n    justify-content: space-between;\n}\n.reply-btn{\n    display: flex;\n    justify-content: flex-end;\n}\n.name{\n    font-size: 1rem;\n    font-weight: bold;\n    color: #1b4b72;\n    text-shadow: 0.2px 0.2px  #888;\n}\n.replyBody2{\n    border-radius: 10px;\n    background: yellow;\n    margin: 3%;\n}\n.replyBody{\n    border-radius: 10px;\n    background: pink;\n    margin: 3%;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/runtime/api.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+// eslint-disable-next-line func-names
+module.exports = function (cssWithMappingToString) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item);
+
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
+
+      return content;
+    }).join("");
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
+
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === "string") {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, ""]];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
+};
 
 /***/ }),
 
@@ -37790,6 +37951,345 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ReplyformComponent.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TextboxComponenet_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TextboxComponenet.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TextboxComponenet_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TextboxComponenet_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \****************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var isOldIE = function isOldIE() {
+  var memo;
+  return function memorize() {
+    if (typeof memo === 'undefined') {
+      // Test for IE <= 9 as proposed by Browserhacks
+      // @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+      // Tests for existence of standard globals is to allow style-loader
+      // to operate correctly into non-standard environments
+      // @see https://github.com/webpack-contrib/style-loader/issues/177
+      memo = Boolean(window && document && document.all && !window.atob);
+    }
+
+    return memo;
+  };
+}();
+
+var getTarget = function getTarget() {
+  var memo = {};
+  return function memorize(target) {
+    if (typeof memo[target] === 'undefined') {
+      var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
+
+      if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+        try {
+          // This will throw an exception if access to iframe is blocked
+          // due to cross-origin restrictions
+          styleTarget = styleTarget.contentDocument.head;
+        } catch (e) {
+          // istanbul ignore next
+          styleTarget = null;
+        }
+      }
+
+      memo[target] = styleTarget;
+    }
+
+    return memo[target];
+  };
+}();
+
+var stylesInDom = [];
+
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+
+  for (var i = 0; i < stylesInDom.length; i++) {
+    if (stylesInDom[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+}
+
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var index = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3]
+    };
+
+    if (index !== -1) {
+      stylesInDom[index].references++;
+      stylesInDom[index].updater(obj);
+    } else {
+      stylesInDom.push({
+        identifier: identifier,
+        updater: addStyle(obj, options),
+        references: 1
+      });
+    }
+
+    identifiers.push(identifier);
+  }
+
+  return identifiers;
+}
+
+function insertStyleElement(options) {
+  var style = document.createElement('style');
+  var attributes = options.attributes || {};
+
+  if (typeof attributes.nonce === 'undefined') {
+    var nonce =  true ? __webpack_require__.nc : 0;
+
+    if (nonce) {
+      attributes.nonce = nonce;
+    }
+  }
+
+  Object.keys(attributes).forEach(function (key) {
+    style.setAttribute(key, attributes[key]);
+  });
+
+  if (typeof options.insert === 'function') {
+    options.insert(style);
+  } else {
+    var target = getTarget(options.insert || 'head');
+
+    if (!target) {
+      throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+    }
+
+    target.appendChild(style);
+  }
+
+  return style;
+}
+
+function removeStyleElement(style) {
+  // istanbul ignore if
+  if (style.parentNode === null) {
+    return false;
+  }
+
+  style.parentNode.removeChild(style);
+}
+/* istanbul ignore next  */
+
+
+var replaceText = function replaceText() {
+  var textStore = [];
+  return function replace(index, replacement) {
+    textStore[index] = replacement;
+    return textStore.filter(Boolean).join('\n');
+  };
+}();
+
+function applyToSingletonTag(style, index, remove, obj) {
+  var css = remove ? '' : obj.media ? "@media ".concat(obj.media, " {").concat(obj.css, "}") : obj.css; // For old IE
+
+  /* istanbul ignore if  */
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = replaceText(index, css);
+  } else {
+    var cssNode = document.createTextNode(css);
+    var childNodes = style.childNodes;
+
+    if (childNodes[index]) {
+      style.removeChild(childNodes[index]);
+    }
+
+    if (childNodes.length) {
+      style.insertBefore(cssNode, childNodes[index]);
+    } else {
+      style.appendChild(cssNode);
+    }
+  }
+}
+
+function applyToTag(style, options, obj) {
+  var css = obj.css;
+  var media = obj.media;
+  var sourceMap = obj.sourceMap;
+
+  if (media) {
+    style.setAttribute('media', media);
+  } else {
+    style.removeAttribute('media');
+  }
+
+  if (sourceMap && typeof btoa !== 'undefined') {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  } // For old IE
+
+  /* istanbul ignore if  */
+
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    while (style.firstChild) {
+      style.removeChild(style.firstChild);
+    }
+
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var singleton = null;
+var singletonCounter = 0;
+
+function addStyle(obj, options) {
+  var style;
+  var update;
+  var remove;
+
+  if (options.singleton) {
+    var styleIndex = singletonCounter++;
+    style = singleton || (singleton = insertStyleElement(options));
+    update = applyToSingletonTag.bind(null, style, styleIndex, false);
+    remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+  } else {
+    style = insertStyleElement(options);
+    update = applyToTag.bind(null, style, options);
+
+    remove = function remove() {
+      removeStyleElement(style);
+    };
+  }
+
+  update(obj);
+  return function updateStyle(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) {
+        return;
+      }
+
+      update(obj = newObj);
+    } else {
+      remove();
+    }
+  };
+}
+
+module.exports = function (list, options) {
+  options = options || {}; // Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+  // tags it will allow on a page
+
+  if (!options.singleton && typeof options.singleton !== 'boolean') {
+    options.singleton = isOldIE();
+  }
+
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+
+    if (Object.prototype.toString.call(newList) !== '[object Array]') {
+      return;
+    }
+
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDom[index].references--;
+    }
+
+    var newLastIdentifiers = modulesToDom(newList, options);
+
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+
+      var _index = getIndexByIdentifier(_identifier);
+
+      if (stylesInDom[_index].references === 0) {
+        stylesInDom[_index].updater();
+
+        stylesInDom.splice(_index, 1);
+      }
+    }
+
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+
 /***/ "./node_modules/vform/dist/vform.es.js":
 /*!*********************************************!*\
   !*** ./node_modules/vform/dist/vform.es.js ***!
@@ -37927,6 +38427,47 @@ component.options.__file = "resources/js/components/ExampleComponent.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/ReplyformComponent.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/ReplyformComponent.vue ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ReplyformComponent_vue_vue_type_template_id_290c201a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ReplyformComponent.vue?vue&type=template&id=290c201a& */ "./resources/js/components/ReplyformComponent.vue?vue&type=template&id=290c201a&");
+/* harmony import */ var _ReplyformComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ReplyformComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ReplyformComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _ReplyformComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ReplyformComponent.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _ReplyformComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _ReplyformComponent_vue_vue_type_template_id_290c201a___WEBPACK_IMPORTED_MODULE_0__.render,
+  _ReplyformComponent_vue_vue_type_template_id_290c201a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ReplyformComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/TextboxComponenet.vue":
 /*!*******************************************************!*\
   !*** ./resources/js/components/TextboxComponenet.vue ***!
@@ -37940,15 +38481,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _TextboxComponenet_vue_vue_type_template_id_413b2089___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TextboxComponenet.vue?vue&type=template&id=413b2089& */ "./resources/js/components/TextboxComponenet.vue?vue&type=template&id=413b2089&");
 /* harmony import */ var _TextboxComponenet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TextboxComponenet.vue?vue&type=script&lang=js& */ "./resources/js/components/TextboxComponenet.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _TextboxComponenet_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TextboxComponenet.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _TextboxComponenet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _TextboxComponenet_vue_vue_type_template_id_413b2089___WEBPACK_IMPORTED_MODULE_0__.render,
   _TextboxComponenet_vue_vue_type_template_id_413b2089___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
@@ -38014,6 +38557,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/ReplyformComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/ReplyformComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ReplyformComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/TextboxComponenet.vue?vue&type=script&lang=js&":
 /*!********************************************************************************!*\
   !*** ./resources/js/components/TextboxComponenet.vue?vue&type=script&lang=js& ***!
@@ -38027,6 +38586,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TextboxComponenet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TextboxComponenet.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TextboxComponenet_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css& ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ReplyformComponent.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=style&index=0&lang=css&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TextboxComponenet_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader/dist/cjs.js!../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TextboxComponenet.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=style&index=0&lang=css&");
+
 
 /***/ }),
 
@@ -38077,6 +38662,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ReplyformComponent.vue?vue&type=template&id=290c201a&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/ReplyformComponent.vue?vue&type=template&id=290c201a& ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_template_id_290c201a___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_template_id_290c201a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ReplyformComponent_vue_vue_type_template_id_290c201a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ReplyformComponent.vue?vue&type=template&id=290c201a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=template&id=290c201a&");
 
 
 /***/ }),
@@ -38169,7 +38771,7 @@ var render = function () {
     { staticClass: "container", staticStyle: { "margin-top": "3%" } },
     [
       _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "col-md-7" }, [
           _c("div", { staticClass: "row" }, [
             _vm._m(0),
             _vm._v(" "),
@@ -38202,7 +38804,7 @@ var render = function () {
                       attrs: {
                         type: "text",
                         name: "name",
-                        placeholder: "name",
+                        placeholder: "Your name",
                       },
                       domProps: { value: _vm.form.name },
                       on: {
@@ -38238,7 +38840,7 @@ var render = function () {
                       attrs: {
                         type: "text",
                         name: "comment",
-                        placeholder: "Comment",
+                        placeholder: "Add Comment...",
                       },
                       domProps: { value: _vm.form.comment },
                       on: {
@@ -38278,6 +38880,18 @@ var render = function () {
           ]),
         ]),
       ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "row justify-content-center" },
+        [
+          _c("textbox-component", {
+            attrs: { comments: _vm.comments },
+            on: { fetch: _vm.fetchComments },
+          }),
+        ],
+        1
+      ),
     ]
   )
 }
@@ -38349,6 +38963,151 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=template&id=290c201a&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/ReplyformComponent.vue?vue&type=template&id=290c201a& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "replyBox", attrs: { id: "reply_id_" + _vm.replyId } },
+    [
+      _c(
+        "form",
+        {
+          on: {
+            submit: function ($event) {
+              $event.preventDefault()
+              return _vm.add_reply(_vm.replyId)
+            },
+            keydown: function ($event) {
+              return _vm.form.onKeydown($event)
+            },
+          },
+        },
+        [
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.replyName,
+                  expression: "form.replyName",
+                },
+              ],
+              staticClass: "form-control replyName",
+              attrs: {
+                type: "text",
+                name: "replyName",
+                placeholder: "Your Name",
+              },
+              domProps: { value: _vm.form.replyName },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "replyName", $event.target.value)
+                },
+              },
+            }),
+            _vm._v(" "),
+            _vm.form.errors.has("replyName")
+              ? _c("div", {
+                  domProps: {
+                    innerHTML: _vm._s(_vm.form.errors.get("replyName")),
+                  },
+                })
+              : _vm._e(),
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            ref: "replyInput_" + _vm.replyId,
+            attrs: { type: "hidden", name: "replyId" },
+            domProps: { value: _vm.replyId },
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.replyComment,
+                  expression: "form.replyComment",
+                },
+              ],
+              staticClass: "form-control replyText",
+              attrs: {
+                type: "text",
+                name: "replyComment",
+                placeholder: "Add Comment...",
+              },
+              domProps: { value: _vm.form.replyComment },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "replyComment", $event.target.value)
+                },
+              },
+            }),
+            _vm._v(" "),
+            _vm.form.errors.has("replyComment")
+              ? _c("div", {
+                  domProps: {
+                    innerHTML: _vm._s(_vm.form.errors.get("replyComment")),
+                  },
+                })
+              : _vm._e(),
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "replyButtons" }, [
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Post reply")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-info",
+                attrs: { type: "button" },
+                on: {
+                  click: function ($event) {
+                    return _vm.cancelReply(_vm.replyId)
+                  },
+                },
+              },
+              [_vm._v("Cancel")]
+            ),
+          ]),
+        ]
+      ),
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=template&id=413b2089&":
 /*!*****************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextboxComponenet.vue?vue&type=template&id=413b2089& ***!
@@ -38370,635 +39129,225 @@ var render = function () {
     { staticClass: "container", staticStyle: { "margin-top": "3%" } },
     [
       _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-md-8" }, [
-          _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              { staticClass: "col-md-10" },
-              _vm._l(_vm.commentsData, function (comment, index) {
-                return _c("div", { staticClass: "comments" }, [
-                  !_vm.spamComments[index] || !comment.spam
-                    ? _c("div", { staticClass: "comment" }, [
-                        _vm._m(0, true),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "comment-box" }, [
-                          _c("div", { staticClass: "comment-text" }, [
-                            _vm._v(_vm._s(comment.comment)),
+        _c(
+          "div",
+          { staticClass: "col-md-7 commentBox" },
+          _vm._l(_vm.comments, function (comment) {
+            return _c("div", { key: comment.commentId }, [
+              comment.reply_id == 0
+                ? _c("div", [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "commentBody",
+                        attrs: { id: comment.commentId },
+                      },
+                      [
+                        _c("div", { staticStyle: { padding: "3%" } }, [
+                          _c("div", { staticClass: "name" }, [
+                            _vm._v(_vm._s(comment.name)),
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "comment-footer" }, [
-                            _c("div", { staticClass: "comment-info" }, [
-                              _c("span", { staticClass: "comment-author" }, [
-                                _c("em", [_vm._v(_vm._s(comment.name))]),
-                              ]),
-                              _vm._v(" "),
-                              _c("span", { staticClass: "comment-date" }, [
-                                _vm._v(_vm._s(comment.date)),
-                              ]),
-                            ]),
+                          _c("div", { staticClass: "commentText" }, [
+                            _c("div", [_vm._v(_vm._s(comment.comment))]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "comment-actions" }, [
-                              _c("ul", { staticClass: "list" }, [
-                                _c("li", [
-                                  _vm._v(
-                                    "Votes: " +
-                                      _vm._s(comment.votes) +
-                                      "\n                                                "
-                                  ),
-                                  !comment.votedByUser
-                                    ? _c(
-                                        "a",
-                                        {
-                                          on: {
-                                            click: function ($event) {
-                                              return _vm.voteComment(
-                                                comment.commentid,
-                                                "directcomment",
-                                                index,
-                                                0,
-                                                "up"
-                                              )
-                                            },
-                                          },
-                                        },
-                                        [_vm._v("Up Votes")]
+                            _c("div", { staticClass: "reply-btn" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-info",
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.showReplyForm(
+                                        comment.commentId
                                       )
-                                    : _vm._e(),
-                                  _vm._v(" "),
-                                  !comment.votedByUser
-                                    ? _c(
-                                        "a",
-                                        {
-                                          on: {
-                                            click: function ($event) {
-                                              return _vm.voteComment(
-                                                comment.commentid,
-                                                "directcomment",
-                                                index,
-                                                0,
-                                                "down"
-                                              )
-                                            },
-                                          },
-                                        },
-                                        [_vm._v("Down Votes")]
-                                      )
-                                    : _vm._e(),
-                                ]),
-                                _vm._v(" "),
-                                _c("li", [
-                                  _c(
-                                    "a",
-                                    {
-                                      on: {
-                                        click: function ($event) {
-                                          return _vm.spamComment(
-                                            comment.commentId,
-                                            "directcomment",
-                                            index,
-                                            0
-                                          )
-                                        },
-                                      },
                                     },
-                                    [_vm._v("Spam")]
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("li", [
-                                  _c(
-                                    "a",
-                                    {
-                                      on: {
-                                        click: function ($event) {
-                                          return _vm.openComment(index)
-                                        },
-                                      },
-                                    },
-                                    [_vm._v("Reply")]
-                                  ),
-                                ]),
-                              ]),
+                                  },
+                                },
+                                [_vm._v("Reply")]
+                              ),
                             ]),
                           ]),
                         ]),
                         _vm._v(" "),
-                        _vm.commentBoxs[index]
-                          ? _c(
+                        _c(
+                          "div",
+                          {
+                            staticStyle: { display: "none" },
+                            attrs: { id: "form_" + comment.commentId },
+                          },
+                          [
+                            _c("replyform-component", {
+                              attrs: { replyId: comment.commentId },
+                              on: { fetchCom: _vm.fetchComments },
+                            }),
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _vm._l(comment.replies, function (replyComment) {
+                          return _c("div", { key: replyComment.commentId }, [
+                            _c(
                               "div",
-                              { staticClass: "comment-form comment-v" },
+                              {
+                                staticClass:
+                                  "commentBody replyBody col-md-10 ml-auto",
+                                staticStyle: { "border-bottom": "none" },
+                                attrs: { id: replyComment.commentId },
+                              },
                               [
-                                _vm._m(1, true),
+                                _c("div", { staticStyle: { padding: "3%" } }, [
+                                  _c("div", { staticClass: "name" }, [
+                                    _vm._v(_vm._s(replyComment.name)),
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "commentText" }, [
+                                    _c("div", [
+                                      _vm._v(_vm._s(replyComment.comment)),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "reply-btn" }, [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-info",
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.showReplyForm(
+                                                replyComment.commentId
+                                              )
+                                            },
+                                          },
+                                        },
+                                        [_vm._v("Reply")]
+                                      ),
+                                    ]),
+                                  ]),
+                                ]),
                                 _vm._v(" "),
                                 _c(
-                                  "form",
+                                  "div",
                                   {
-                                    staticClass: "form",
-                                    attrs: { name: "form" },
+                                    staticStyle: { display: "none" },
+                                    attrs: {
+                                      id: "form_" + replyComment.commentId,
+                                    },
                                   },
                                   [
-                                    _c("div", { staticClass: "form-row" }, [
-                                      _c("textarea", {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.message,
-                                            expression: "message",
-                                          },
-                                        ],
-                                        staticClass: "input",
-                                        attrs: {
-                                          placeholder: "Add comment...",
-                                          required: "",
-                                        },
-                                        domProps: { value: _vm.message },
-                                        on: {
-                                          input: function ($event) {
-                                            if ($event.target.composing) {
-                                              return
-                                            }
-                                            _vm.message = $event.target.value
-                                          },
-                                        },
-                                      }),
-                                      _vm._v(" "),
-                                      _vm.errorReply
-                                        ? _c(
-                                            "span",
-                                            {
-                                              staticClass: "input",
-                                              staticStyle: { color: "red" },
-                                            },
-                                            [_vm._v(_vm._s(_vm.errorReply))]
-                                          )
-                                        : _vm._e(),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "form-row" }, [
-                                      _c("input", {
-                                        staticClass: "input",
-                                        attrs: {
-                                          placeholder: "Email",
-                                          type: "text",
-                                        },
-                                        domProps: { value: _vm.user.name },
-                                      }),
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("div", { staticClass: "form-row" }, [
-                                      _c("input", {
-                                        staticClass: "btn btn-success",
-                                        attrs: {
-                                          type: "button",
-                                          value: "Add Comment",
-                                        },
-                                        on: {
-                                          click: function ($event) {
-                                            return _vm.replyComment(
-                                              comment.commentid,
-                                              index
-                                            )
-                                          },
-                                        },
-                                      }),
-                                    ]),
-                                  ]
+                                    _c("replyform-component", {
+                                      attrs: {
+                                        replyId: replyComment.commentId,
+                                      },
+                                      on: { fetchCom: _vm.fetchComments },
+                                    }),
+                                  ],
+                                  1
                                 ),
-                              ]
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        comment.replies
-                          ? _c(
-                              "div",
-                              _vm._l(
-                                comment.replies,
-                                function (replies, index2) {
-                                  return _c(
-                                    "div",
-                                    { staticClass: "comments" },
-                                    [
-                                      !_vm.spamCommentsReply[index2] ||
-                                      !replies.spam
-                                        ? _c(
-                                            "div",
-                                            { staticClass: "comment reply" },
-                                            [
-                                              _vm._m(2, true),
-                                              _vm._v(" "),
-                                              _c(
-                                                "div",
-                                                {
-                                                  staticClass: "comment-box",
-                                                  staticStyle: {
-                                                    background: "grey",
+                                _vm._v(" "),
+                                _vm._l(
+                                  replyComment.replies,
+                                  function (replyComment2) {
+                                    return _c(
+                                      "div",
+                                      { key: replyComment2.commentId },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "commentBody replyBody2 col-md-10 ml-auto",
+                                            staticStyle: {
+                                              "border-bottom": "none",
+                                            },
+                                            attrs: {
+                                              id: replyComment2.commentId,
+                                            },
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticStyle: { padding: "3%" },
+                                              },
+                                              [
+                                                _c(
+                                                  "div",
+                                                  { staticClass: "name" },
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(replyComment2.name)
+                                                    ),
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass: "commentText",
                                                   },
-                                                },
-                                                [
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "comment-text",
-                                                      staticStyle: {
-                                                        color: "white",
-                                                      },
-                                                    },
-                                                    [
+                                                  [
+                                                    _c("div", [
                                                       _vm._v(
-                                                        _vm._s(replies.comment)
+                                                        _vm._s(
+                                                          replyComment2.comment
+                                                        )
                                                       ),
-                                                    ]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "comment-footer",
-                                                    },
-                                                    [
-                                                      _c(
-                                                        "div",
-                                                        {
-                                                          staticClass:
-                                                            "comment-info",
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              staticClass:
-                                                                "comment-author",
-                                                            },
-                                                            [
-                                                              _vm._v(
-                                                                "\n                                       " +
-                                                                  _vm._s(
-                                                                    replies.name
-                                                                  ) +
-                                                                  "\n                                   "
-                                                              ),
-                                                            ]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              staticClass:
-                                                                "comment-date",
-                                                            },
-                                                            [
-                                                              _vm._v(
-                                                                _vm._s(
-                                                                  replies.date
-                                                                )
-                                                              ),
-                                                            ]
-                                                          ),
-                                                        ]
-                                                      ),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "div",
-                                                        {
-                                                          staticClass:
-                                                            "comment-actions",
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "ul",
-                                                            {
-                                                              staticClass:
-                                                                "list",
-                                                            },
-                                                            [
-                                                              _c("li", [
-                                                                _vm._v(
-                                                                  "Total votes: " +
-                                                                    _vm._s(
-                                                                      replies.votes
-                                                                    ) +
-                                                                    "\n                                                            "
-                                                                ),
-                                                                !replies.votedByUser
-                                                                  ? _c(
-                                                                      "a",
-                                                                      {
-                                                                        on: {
-                                                                          click:
-                                                                            function (
-                                                                              $event
-                                                                            ) {
-                                                                              return _vm.voteComment(
-                                                                                replies.commentid,
-                                                                                "replycomment",
-                                                                                index,
-                                                                                index2,
-                                                                                "up"
-                                                                              )
-                                                                            },
-                                                                        },
-                                                                      },
-                                                                      [
-                                                                        _vm._v(
-                                                                          "Up Votes"
-                                                                        ),
-                                                                      ]
-                                                                    )
-                                                                  : _vm._e(),
-                                                                _vm._v(" "),
-                                                                !replies.votedByUser
-                                                                  ? _c(
-                                                                      "a",
-                                                                      {
-                                                                        on: {
-                                                                          click:
-                                                                            function (
-                                                                              $event
-                                                                            ) {
-                                                                              return _vm.voteComment(
-                                                                                comment.commentid,
-                                                                                "replycomment",
-                                                                                index,
-                                                                                index2,
-                                                                                "down"
-                                                                              )
-                                                                            },
-                                                                        },
-                                                                      },
-                                                                      [
-                                                                        _vm._v(
-                                                                          "Down Votes"
-                                                                        ),
-                                                                      ]
-                                                                    )
-                                                                  : _vm._e(),
-                                                              ]),
-                                                              _vm._v(" "),
-                                                              _c("li", [
-                                                                _c(
-                                                                  "a",
-                                                                  {
-                                                                    on: {
-                                                                      click:
-                                                                        function (
-                                                                          $event
-                                                                        ) {
-                                                                          return _vm.spamComment(
-                                                                            replies.commentid,
-                                                                            "replycomment",
-                                                                            index,
-                                                                            index2
-                                                                          )
-                                                                        },
-                                                                    },
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "Spam"
-                                                                    ),
-                                                                  ]
-                                                                ),
-                                                              ]),
-                                                              _vm._v(" "),
-                                                              _c("li", [
-                                                                _c(
-                                                                  "a",
-                                                                  {
-                                                                    on: {
-                                                                      click:
-                                                                        function (
-                                                                          $event
-                                                                        ) {
-                                                                          return _vm.replyCommentBox(
-                                                                            index2
-                                                                          )
-                                                                        },
-                                                                    },
-                                                                  },
-                                                                  [
-                                                                    _vm._v(
-                                                                      "Reply"
-                                                                    ),
-                                                                  ]
-                                                                ),
-                                                              ]),
-                                                            ]
-                                                          ),
-                                                        ]
-                                                      ),
-                                                    ]
-                                                  ),
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _vm.replyCommentBoxs[index2]
-                                                ? _c(
-                                                    "div",
-                                                    {
-                                                      staticClass:
-                                                        "comment-form reply",
-                                                    },
-                                                    [
-                                                      _vm._m(3, true),
-                                                      _vm._v(" "),
-                                                      _c(
-                                                        "form",
-                                                        {
-                                                          staticClass: "form",
-                                                          attrs: {
-                                                            name: "form",
-                                                          },
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "div",
-                                                            {
-                                                              staticClass:
-                                                                "form-row",
-                                                            },
-                                                            [
-                                                              _c("textarea", {
-                                                                directives: [
-                                                                  {
-                                                                    name: "model",
-                                                                    rawName:
-                                                                      "v-model",
-                                                                    value:
-                                                                      _vm.message,
-                                                                    expression:
-                                                                      "message",
-                                                                  },
-                                                                ],
-                                                                staticClass:
-                                                                  "input",
-                                                                attrs: {
-                                                                  placeholder:
-                                                                    "Add comment...",
-                                                                  required: "",
-                                                                },
-                                                                domProps: {
-                                                                  value:
-                                                                    _vm.message,
-                                                                },
-                                                                on: {
-                                                                  input:
-                                                                    function (
-                                                                      $event
-                                                                    ) {
-                                                                      if (
-                                                                        $event
-                                                                          .target
-                                                                          .composing
-                                                                      ) {
-                                                                        return
-                                                                      }
-                                                                      _vm.message =
-                                                                        $event.target.value
-                                                                    },
-                                                                },
-                                                              }),
-                                                              _vm._v(" "),
-                                                              _vm.errorReply
-                                                                ? _c(
-                                                                    "span",
-                                                                    {
-                                                                      staticClass:
-                                                                        "input",
-                                                                      staticStyle:
-                                                                        {
-                                                                          color:
-                                                                            "red",
-                                                                        },
-                                                                    },
-                                                                    [
-                                                                      _vm._v(
-                                                                        _vm._s(
-                                                                          _vm.errorReply
-                                                                        )
-                                                                      ),
-                                                                    ]
-                                                                  )
-                                                                : _vm._e(),
-                                                            ]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "div",
-                                                            {
-                                                              staticClass:
-                                                                "form-row",
-                                                            },
-                                                            [
-                                                              _c("input", {
-                                                                staticClass:
-                                                                  "input",
-                                                                attrs: {
-                                                                  placeholder:
-                                                                    "Email",
-                                                                  type: "text",
-                                                                },
-                                                                domProps: {
-                                                                  value:
-                                                                    _vm.user
-                                                                      .name,
-                                                                },
-                                                              }),
-                                                            ]
-                                                          ),
-                                                          _vm._v(" "),
-                                                          _c(
-                                                            "div",
-                                                            {
-                                                              staticClass:
-                                                                "form-row",
-                                                            },
-                                                            [
-                                                              _c("input", {
-                                                                staticClass:
-                                                                  "btn btn-success",
-                                                                attrs: {
-                                                                  type: "button",
-                                                                  value:
-                                                                    "Add Comment",
-                                                                },
-                                                                on: {
-                                                                  click:
-                                                                    function (
-                                                                      $event
-                                                                    ) {
-                                                                      return _vm.replyComment(
-                                                                        comment.commentid,
-                                                                        index
-                                                                      )
-                                                                    },
-                                                                },
-                                                              }),
-                                                            ]
-                                                          ),
-                                                        ]
-                                                      ),
-                                                    ]
-                                                  )
-                                                : _vm._e(),
-                                            ]
-                                          )
-                                        : _vm._e(),
-                                    ]
-                                  )
-                                }
-                              ),
-                              0
-                            )
-                          : _vm._e(),
-                      ])
-                    : _vm._e(),
-                ])
-              }),
-              0
-            ),
-          ]),
-        ]),
+                                                    ]),
+                                                  ]
+                                                ),
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "div",
+                                              {
+                                                staticStyle: {
+                                                  display: "none",
+                                                },
+                                                attrs: {
+                                                  id:
+                                                    "form_" +
+                                                    replyComment2.commentId,
+                                                },
+                                              },
+                                              [
+                                                _c("replyform-component", {
+                                                  attrs: {
+                                                    replyId:
+                                                      replyComment2.commentId,
+                                                  },
+                                                  on: {
+                                                    fetchCom: _vm.fetchComments,
+                                                  },
+                                                }),
+                                              ],
+                                              1
+                                            ),
+                                          ]
+                                        ),
+                                      ]
+                                    )
+                                  }
+                                ),
+                              ],
+                              2
+                            ),
+                          ])
+                        }),
+                      ],
+                      2
+                    ),
+                  ])
+                : _vm._e(),
+            ])
+          }),
+          0
+        ),
       ]),
     ]
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-avatar" }, [
-      _c("img", { attrs: { src: "storage/comment.png" } }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-avatar" }, [
-      _c("img", { attrs: { src: "storage/comment.png" } }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-avatar" }, [
-      _c("img", { attrs: { src: "storage/comment.png" } }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "comment-avatar" }, [
-      _c("img", { attrs: { src: "storage/comment.png" } }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

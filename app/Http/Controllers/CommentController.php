@@ -17,7 +17,6 @@ class CommentController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'comment' => 'required',
-            'reply_id' => 'filled',
         ]);
 
         $comment = Comment::create($request->all());
@@ -32,25 +31,28 @@ class CommentController extends Controller
 
     protected function replies($commentId)
     {
-        $comments = Comment::where('reply_id',$commentId)->get();
+        $comments = Comment::where('reply_id',$commentId)->orderBy('created_at', 'desc')->get();
         $replies = [];
+        $commentsCollection =[];
 
         foreach ($comments as $comment) {
                 array_push($replies,[
                     "commentId" => $comment->id,
                     "name" => $comment -> name,
                     "comment" => $comment->comment,
-                    "date" => $comment->created_at->toDateTimeString()
+                    "replyId" => $comment->reply_id,
+                    "date" => $comment->created_at->toDateTimeString(),
+                    "replies" => $this->replies($comment->id)
                 ]);
 
             $commentsCollection = collect($replies);
-            return $commentsCollection;
         }
+        return $commentsCollection;
     }
 
     public function fetchComments()
     {
-        $comments = Comment::get();
+        $comments = Comment::orderBy('created_at', 'desc')->get();
         $commentsArray = [];
 
         foreach ($comments as $comment){
@@ -58,24 +60,46 @@ class CommentController extends Controller
 
             $reply = 0;
 
-            if ($replies != null){
-                if(sizeof($replies) > 0){
-                    $reply = 1;
-                }
-            }
-
             array_push($commentsArray,[
                 "commentId" => $comment->id,
                 "name" => $comment -> name,
                 "comment" => $comment->comment,
-                "reply" => $reply,
+                "replyNumber" => $comment->replies,
                 "replies" => $replies,
+                "reply_id" => $comment->reply_id,
                 "date" => $comment->created_at->toDateTimeString()
             ]);
         }
 
         $comments = collect($commentsArray);
-        dd($comments);
-        return response()->json($comments) ;
+        return response()->json([
+            'status' => true,
+            'message' => 'Comments fetch successfully',
+            'comments' => $comments
+        ]) ;
+    }
+
+    public function addReply(Request $request)
+    {
+        $formInputs = $request->all();
+
+        $comment = Comment::create([
+            'name' => $formInputs[0]["replyName"],
+            'comment' => $formInputs[0]["replyComment"],
+            'reply_id' => $formInputs[1],
+        ]);
+
+        $parentComment = Comment::findOrFail($formInputs[1]);
+        $parentComment -> update([
+           'replies' =>  ($parentComment -> replies) + 1
+        ]);
+
+        if($comment){
+            return response() -> json([
+                'status' => true,
+                'message' => 'Reply added',
+                'comment_id' => $comment->id
+            ]);
+        }
     }
 }

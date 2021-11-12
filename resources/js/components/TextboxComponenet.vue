@@ -1,129 +1,62 @@
 <template>
     <div class="container" style="margin-top: 3%">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-10">
-
-
-                        <div class="comments" v-if="" v-for="(comment,index) in commentsData">
-                            <!-- Comment -->
-                            <div v-if="!spamComments[index] || !comment.spam" class="comment">
-                                <!-- Comment Avatar -->
-                                <div class="comment-avatar">
-                                    <img src="storage/comment.png">
-                                </div>
-                                <!-- Comment Box -->
-                                <div class="comment-box">
-                                    <div class="comment-text">{{comment.comment}}</div>
-                                    <div class="comment-footer">
-                                        <div class="comment-info">
-                       <span class="comment-author">
-                               <em>{{ comment.name}}</em>
-                           </span>
-                                            <span class="comment-date">{{ comment.date}}</span>
-                                        </div>
-                                        <div class="comment-actions">
-                                            <ul class="list">
-                                                <li>Votes: {{comment.votes}}
-                                                    <a v-if="!comment.votedByUser" v-on:click="voteComment(comment.commentid,'directcomment',index,0,'up')">Up Votes</a>
-                                                    <a v-if="!comment.votedByUser" v-on:click="voteComment(comment.commentid,'directcomment',index,0,'down')">Down Votes</a>
-                                                </li>
-                                                <li>
-                                                    <a v-on:click="spamComment(comment.commentId,'directcomment',index,0)">Spam</a>
-                                                </li>
-                                                <li>
-                                                    <a v-on:click="openComment(index)">Reply</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+            <div class="col-md-7 commentBox">
+                <div v-for="comment in comments" :key="comment.commentId">
+                    <div v-if="comment.reply_id == 0">
+                        <div class="commentBody" :id="comment.commentId">
+                            <div style="padding: 3% ">
+                                <div class="name">{{comment.name}}</div>
+                                <div class="commentText">
+                                    <div>{{comment.comment}}</div>
+                                    <div class="reply-btn">
+                                        <button class="btn btn-info" @click="showReplyForm(comment.commentId)">Reply</button>
                                     </div>
                                 </div>
-                                <!-- From -->
-                                <div class="comment-form comment-v" v-if="commentBoxs[index]">
-                                    <!-- Comment Avatar -->
-                                    <div class="comment-avatar">
-                                        <img src="storage/comment.png">
+                            </div>
+
+                            <div :id="'form_' + comment.commentId" style="display:none">
+                                <replyform-component :replyId="comment.commentId" @fetchCom="fetchComments"></replyform-component>
+                            </div>
+
+                            <div v-for="replyComment in comment.replies" :key="replyComment.commentId">
+                                <div class="commentBody replyBody col-md-10 ml-auto" :id="replyComment.commentId" style="border-bottom: none">
+                                    <div style="padding: 3% ">
+                                        <div class="name">{{replyComment.name}}</div>
+                                        <div class="commentText">
+                                            <div>{{replyComment.comment}}</div>
+                                            <div class="reply-btn">
+                                                <button class="btn btn-info" @click="showReplyForm(replyComment.commentId)">Reply</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <form class="form" name="form">
-                                        <div class="form-row">
-                                            <textarea class="input" placeholder="Add comment..." required v-model="message"></textarea>
-                                            <span class="input" v-if="errorReply" style="color:red">{{errorReply}}</span>
-                                        </div>
-                                        <div class="form-row">
-                                            <input class="input" placeholder="Email" type="text" :value="user.name">
-                                        </div>
-                                        <div class="form-row">
-                                            <input type="button" class="btn btn-success" v-on:click="replyComment(comment.commentid,index)" value="Add Comment">
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Comment - Reply -->
-                                <div v-if="comment.replies">
-                                    <div class="comments" v-for="(replies,index2) in comment.replies">
-                                        <div v-if="!spamCommentsReply[index2] || !replies.spam" class="comment reply">
-                                            <!-- Comment Avatar -->
-                                            <div class="comment-avatar">
-                                                <img src="storage/comment.png">
-                                            </div>
-                                            <!-- Comment Box -->
-                                            <div class="comment-box" style="background: grey;">
-                                                <div class="comment-text" style="color: white">{{replies.comment}}</div>
-                                                <div class="comment-footer">
-                                                    <div class="comment-info">
-                                   <span class="comment-author">
-                                           {{replies.name}}
-                                       </span>
-                                                        <span class="comment-date">{{replies.date}}</span>
-                                                    </div>
-                                                    <div class="comment-actions">
-                                                        <ul class="list">
-                                                            <li>Total votes: {{replies.votes}}
-                                                                <a v-if="!replies.votedByUser" v-on:click="voteComment(replies.commentid,'replycomment',index,index2,'up')">Up Votes</a>
-                                                                <a v-if="!replies.votedByUser" v-on:click="voteComment(comment.commentid,'replycomment',index,index2,'down')">Down Votes</a>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a v-on:click="spamComment(replies.commentid,'replycomment',index,index2)">Spam</a>
-                                                            </li>
-                                                            <li>
-                                                                <a v-on:click="replyCommentBox(index2)">Reply</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+
+                                    <div :id="'form_' + replyComment.commentId" style="display:none">
+                                        <replyform-component :replyId="replyComment.commentId" @fetchCom="fetchComments"></replyform-component>
+                                    </div>
+
+                                    <div v-for="replyComment2 in replyComment.replies" :key="replyComment2.commentId">
+                                        <div class="commentBody replyBody2 col-md-10 ml-auto" :id="replyComment2.commentId" style="border-bottom: none">
+                                            <div style="padding: 3% ">
+                                                <div class="name">{{replyComment2.name}}</div>
+                                                <div class="commentText">
+                                                    <div>{{replyComment2.comment}}</div>
                                                 </div>
                                             </div>
-                                            <!-- From -->
-                                            <div class="comment-form reply" v-if="replyCommentBoxs[index2]">
-                                                <!-- Comment Avatar -->
-                                                <div class="comment-avatar">
-                                                    <img src="storage/comment.png">
-                                                </div>
-                                                <form class="form" name="form">
-                                                    <div class="form-row">
-                                                        <textarea class="input" placeholder="Add comment..." required v-model="message"></textarea>
-                                                        <span class="input" v-if="errorReply" style="color:red">{{errorReply}}</span>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <input class="input" placeholder="Email" type="text" :value="user.name">
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <input type="button" class="btn btn-success" v-on:click="replyComment(comment.commentid,index)" value="Add Comment">
-                                                    </div>
-                                                </form>
+
+                                            <div :id="'form_' + replyComment2.commentId" style="display:none">
+                                                <replyform-component @fetchCom="fetchComments" :replyId="replyComment2.commentId"></replyform-component>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
-                </div>
                 </div>
             </div>
+        </div>
         </div>
 </template>
 
@@ -131,15 +64,71 @@
 export default {
     data() {
         return {
-            comments : []
+            replyClicked : false
         }
     },
     props: [
-
+        'comments'
     ],
 
     methods: {
+        showReplyForm(commentId) {
+            let formElement = document.getElementById("form_" + commentId);
+            let form = document.getElementById("reply_id_" + commentId);
+            formElement.style.display = 'block';
+            form.style.display = 'block';
+        },
+        fetchComments() {
+            this.$emit("fetch")
+        },
+    },
+
+    mounted() {
 
     }
 }
 </script>
+
+<style>
+
+    .commentBox{
+        /*border: 1px solid #bdbdbd;*/
+        background: #f1f1f1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0;
+    }
+    .commentBody{
+        padding: 0;
+        border-bottom: 1px solid #bdbdbd;
+        padding-bottom: 3%;
+    }
+    .commentText{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .reply-btn{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .name{
+        font-size: 1rem;
+        font-weight: bold;
+        color: #1b4b72;
+        text-shadow: 0.2px 0.2px  #888;
+    }
+
+    .replyBody2{
+        border-radius: 10px;
+        background: yellow;
+        margin: 3%;
+    }
+
+    .replyBody{
+        border-radius: 10px;
+        background: pink;
+        margin: 3%;
+    }
+</style>

@@ -17,3 +17,4 @@ use App\Http\Controllers\CommentController;
 
 Route::post('store', [CommentController::class, 'store']);
 Route::get('fetch_comments', [CommentController::class, 'fetchComments']);
+Route::post('add_reply', [CommentController::class, 'addReply']);
